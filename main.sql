@@ -35,12 +35,14 @@ CREATE TABLE funcionario (
 CREATE TABLE empresa (
     id_usuario INTEGER NOT NULL,
 
-    cnpj CHAR(14) UNIQUE NOT NULL,
+    cnpj CHAR(14) NOT NULL,
 
     nome_empresa VARCHAR(255) NOT NULL,
 
     CONSTRAINT pk_empresa PRIMARY KEY (id_usuario, cnpj),
 
+	CONSTRAINT un_empresa UNIQUE (cnpj),
+	
     CONSTRAINT fk_empresa_usuario
         FOREIGN KEY (id_usuario)
         REFERENCES usuario(id_usuario)
@@ -55,6 +57,8 @@ CREATE TABLE dados_empresa (
     id_dados SERIAL PRIMARY KEY,
 
     id_empresa INTEGER NOT NULL,
+
+	cnpj CHAR(14) NOT NULL,
 
     datas DATE NOT NULL,
 
@@ -73,8 +77,8 @@ CREATE TABLE dados_empresa (
     id_usuario_modificador INTEGER NOT NULL,
 
     CONSTRAINT fk_dados_empresa
-        FOREIGN KEY (id_empresa)
-        REFERENCES empresa(id_usuario),
+        FOREIGN KEY (id_empresa, cnpj)
+        REFERENCES empresa(id_usuario, cnpj),
 
     CONSTRAINT fk_modificador
         FOREIGN KEY (id_usuario_modificador)
